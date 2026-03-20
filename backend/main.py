@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from settings import settings
 import os
-from routers import data, spark
+from routers import data, spark, total
 
 
 
@@ -21,6 +21,7 @@ app.add_middleware(
 
 app.include_router(data.router)
 app.include_router(spark.router)
+app.include_router(total.router)
 
 @app.get("/")
 def read_root():
