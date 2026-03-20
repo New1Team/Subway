@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { api } from '@utils/network.js'
-
+import myIcon from "@/assets/icon.jpg";
 const Maps = ({year}) => {
   const [map, setMap] = useState(null); // 지도 객체 저장
   const [info, setInfo] = useState(null); // 클릭한 마커의 상세 정보
@@ -70,7 +70,7 @@ const Maps = ({year}) => {
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => setInfo(marker)} // 마커 클릭 시 정보 저장
             image={{
-              src: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png",
+              src: myIcon,
               //마커 바꾸려면 이거⬆ 바꿔야함
               size: { width: 27, height: 28 }, //이건 마커 사이즈따라 바꾸면 됨
               options: {
