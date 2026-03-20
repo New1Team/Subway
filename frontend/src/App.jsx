@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router"
+  import { Routes, Route } from "react-router"
 import NotFound from '@pages/NotFound.jsx'
 import Maps from '@pages/Maps.jsx'
 import Card from '@pages/Card.jsx'

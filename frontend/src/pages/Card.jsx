@@ -19,10 +19,12 @@ const Card = () => {
       setLoading(true);
       try {
         const [mapRes, kpiRes] = await Promise.all([
-        //   axios.get(`http://localhost:8000/data?year=${selectedYear}`),
+          axios.get(`http://localhost:8000/data?year=${selectedYear}`),
           axios.get(`http://localhost:8000/data/kpi?year=${selectedYear}`)
         ]);
-        setKpiData(kpiRes.data.data);
+         
+         setKpiData(kpiRes.data);
+      
       } catch (error) {
         console.error("데이터 로드 실패:", error);
       } finally {
@@ -32,6 +34,8 @@ const Card = () => {
 
     fetchData();
   }, [selectedYear]);
+ 
+  const fmt = (n) => Number(n ?? 0).toLocaleString();
 
   return (
     <div className="dashboard-wrapper">
@@ -49,22 +53,79 @@ const Card = () => {
       </div>
 
       {/* 2. 핵심 지표 (KPI) 카드 섹션 */}
-      <div className="kpi-grid-3">
+       <div className="kpi-grid-3">
+
+        {/* 출근시간 — 2섹션 (승차 | 하차) */}
         <div className="box kpi-card">
-          <span className='kpi-title'>출근시간 최다 승하차</span>
-          <div className='kpi-value'>{kpiData.commute.station}</div>
-          <span className='kpi-sub'>{kpiData.commute.count.toLocaleString()}명</span>
-        </div>  
-        <div className="box kpi-card">
-          <span className='kpi-title'>퇴근시간 최다 승하차</span>
-          <div className='kpi-value'>{kpiData.weekday.station}</div>
-          <span className='kpi-sub'>{kpiData.weekday.count.toLocaleString()}명</span>
+          <span className="kpi-title">출근시간 최다 승하차</span>
+          <div className="kpi-card-body kpi-2col">
+            <div className="kpi-section">
+              <span className="kpi-section-label boarding">🟢 승차</span>
+              <div className="kpi-value">{kpiData.commute.boarding?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.commute.boarding?.값)}명</span>
+            </div>
+            <div className="kpi-divider" />
+            <div className="kpi-section">
+              <span className="kpi-section-label alighting">🔴 하차</span>
+              <div className="kpi-value">{kpiData.commute.alighting?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.commute.alighting?.값)}명</span>
+            </div>
+          </div>
         </div>
+
+        {/* 퇴근시간 — 2섹션 (승차 | 하차) */}
         <div className="box kpi-card">
-          <span className='kpi-title'>주말 최다 승하차</span>
-          <div className='kpi-value'>{kpiData.weekend.station}</div>
-          <span className='kpi-sub'>{kpiData.weekend.count.toLocaleString()}명</span>
+          <span className="kpi-title">퇴근시간 최다 승하차</span>
+          <div className="kpi-card-body kpi-2col">
+            <div className="kpi-section">
+              <span className="kpi-section-label boarding">🟢 승차</span>
+              <div className="kpi-value">{kpiData.weekday.boarding?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.weekday.boarding?.값)}명</span>
+            </div>
+            <div className="kpi-divider" />
+            <div className="kpi-section">
+              <span className="kpi-section-label alighting">🔴 하차</span>
+              <div className="kpi-value">{kpiData.weekday.alighting?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.weekday.alighting?.값)}명</span>
+            </div>
+          </div>
         </div>
+
+        {/* 주말 — 4섹션 (오전 승차 | 오전 하차 | 오후 승차 | 오후 하차) */}
+        <div className="box kpi-card">
+          <span className="kpi-title">주말 최다 승하차</span>
+          <div className="kpi-card-body kpi-4col">
+
+            <div className="kpi-section">
+              <span className="kpi-section-label boarding">🟢 오전 승차</span>
+              <div className="kpi-value kpi-value-sm">{kpiData.weekend.am_boarding?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.weekend.am_boarding?.값)}명</span>
+            </div>
+            <div className="kpi-divider" />
+
+            <div className="kpi-section">
+              <span className="kpi-section-label alighting">🔴 오전 하차</span>
+              <div className="kpi-value kpi-value-sm">{kpiData.weekend.am_alighting?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.weekend.am_alighting?.값)}명</span>
+            </div>
+            <div className="kpi-divider" />
+
+            <div className="kpi-section">
+              <span className="kpi-section-label boarding">🟢 오후 승차</span>
+              <div className="kpi-value kpi-value-sm">{kpiData.weekend.pm_boarding?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.weekend.pm_boarding?.값)}명</span>
+            </div>
+            <div className="kpi-divider" />
+
+            <div className="kpi-section">
+              <span className="kpi-section-label alighting">🔴 오후 하차</span>
+              <div className="kpi-value kpi-value-sm">{kpiData.weekend.pm_alighting?.역명 ?? '-'}</div>
+              <span className="kpi-sub">{fmt(kpiData.weekend.pm_alighting?.값)}명</span>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
       {/* 3. 지도 시각화 섹션 */}

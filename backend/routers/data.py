@@ -15,6 +15,57 @@ def get_data(year: int):
   data = findAll(sql)
   return {'data': data}
 
+
+
+@router.get('/kpi')
+def get_kpi(year: int):
+
+    def top1_query(col, label, day_cond):
+        return f'''
+            WITH ranked AS (
+                SELECT src_year, 역명, {col} AS total,
+                       ROW_NUMBER() OVER (PARTITION BY src_year ORDER BY {col} DESC) AS rn
+                FROM station_timeband_by_name
+                WHERE 휴무일구분 {day_cond}
+                  AND src_year = {year}
+            )
+            SELECT src_year, '{label}' AS kpi, 역명, total AS 값
+            FROM ranked WHERE rn = 1;
+        '''
+
+    weekday  = "= '평일'"
+    weekend  = "IN ('토요일','일요일','공휴일')"
+    
+
+    # data_on             = findAll(top1_query('출근_승차합', '평일 출근 승차 최대역', weekday))
+    # data_off            = findAll(top1_query('출근_하차합', '평일 출근 하차 최대역', weekday))
+    # data_work_on        = findAll(top1_query('퇴근_승차합', '평일 퇴근 승차 최대역', weekday))
+    # data_work_off       = findAll(top1_query('퇴근_하차합', '평일 퇴근 하차 최대역', weekday))
+    # data_weekend_am_on  = findAll(top1_query('오전_승차합', '주말 오전 승차 최대역', weekend))
+    # data_weekend_am_off = findAll(top1_query('오전_하차합', '주말 오전 하차 최대역', weekend))
+    # data_weekend_pm_on  = findAll(top1_query('오후_승차합', '주말 오후 승차 최대역', weekend))
+    # data_weekend_pm_off = findAll(top1_query('오후_하차합', '주말 오후 하차 최대역', weekend))
+
+    def first(rows):
+        return rows[0] if rows else {"역명": "-", "값": 0}
+
+    return {
+        'commute': {
+            'boarding':  first(data_on),
+            'alighting': first(data_off),
+        },
+        'weekday': {
+            'boarding':  first(data_work_on),
+            'alighting': first(data_work_off),
+        },
+        'weekend': {
+            'am_boarding':  first(data_weekend_am_on),
+            'am_alighting': first(data_weekend_am_off),
+            'pm_boarding':  first(data_weekend_pm_on),
+            'pm_alighting': first(data_weekend_pm_off),
+        },
+    }
+
 # @app.get("/api/metro_seoul/coordinate")
 # async def get_coordinate():
 #     # 여기에 DB(MariaDB)에서 데이터를 가져오는 로직이 들어가야 합니다.

@@ -2,16 +2,14 @@
 
 .dashboard-wrapper {
   max-width: 1200px;
-  margin: 50px auto; /* 이게 핵심 - 좌우 auto */
+  margin: 50px auto;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  /* ❌ align-items: center 제거 - width:100% 자식 요소와 충돌함 */
   gap: 30px;
   box-sizing: border-box;
 }
 
-/* ✅ box 클래스 기본 스타일 추가 (누락되어 있었음) */
 .box {
   width: 100%;
   box-sizing: border-box;
@@ -21,7 +19,6 @@
   padding: 20px;
 }
 
-/* 모든 섹션의 너비를 동일하게 유지 */
 .center-section, .kpi-grid-3 {
   width: 100%;
   box-sizing: border-box;
@@ -52,11 +49,11 @@
   background-color: #f8f9fa !important;
   border: 1px solid #e9ecef !important;
   border-radius: 15px;
-  padding: 30px !important;
+  padding: 20px !important;
   min-height: 160px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 12px;
   text-align: left;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -72,19 +69,80 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: #000000;
-  margin-bottom: 10px;
 }
 
+/* ── KPI 카드 내부 바디 ── */
+.kpi-card-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  gap: 0;
+}
+
+/* 출근/퇴근 — 2섹션 */
+.kpi-2col .kpi-section {
+  flex: 1;
+}
+
+/* 주말 — 4섹션 */
+.kpi-4col .kpi-section {
+  flex: 1;
+  min-width: 0; /* 텍스트 overflow 방지 */
+}
+
+/* 공통 섹션 */
+.kpi-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6px 4px;
+  gap: 4px;
+}
+
+/* 구분선 */
+.kpi-divider {
+  width: 1px;
+  height: 64px;
+  background: #dee2e6;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* 라벨 */
+.kpi-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.kpi-section-label.boarding  { color: #2e7d32; }
+.kpi-section-label.alighting { color: #c62828; }
+
+/* 역명 */
 .kpi-value {
-  font-size: 2.2rem;
+  font-size: 1.5rem;
   font-weight: 850;
-  color: #6c757d;
-  margin: 5px 0;
+  color: #343a40;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* 4섹션일 때 역명 폰트 축소 */
+.kpi-value-sm {
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .kpi-sub {
-  font-size: 0.85rem;
-  color: #000000;
+  font-size: 0.78rem;
+  color: #6c757d;
 }
 
 /* 지도 섹션 */
@@ -112,7 +170,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
   font-size: 1rem;
   color: #555;
 }
