@@ -11,7 +11,7 @@ const Maps = ({year}) => {
 
   // 스프라이트 이미지 순서 계산기 (카카오 예제 기준)
   const getCategoryOrder = (category) => {
-    const orders = { "BK9": 0, "MT1": 1, "PM9": 2, "OL7": 3, "CE7": 4, "CS2": 5 };
+    const orders = { "BK9": 0, "거주지": 1, "산업지": 2, "여가단지": 3, "CE7": 4, "CS2": 5 };
     return orders[category] || 0;
   }
 
@@ -108,7 +108,7 @@ const Maps = ({year}) => {
       {/* 카테고리 선택 버튼들 */}
       {/* 꾸미는 건 ui에서 */}
       <div style={{ position: "absolute", top: "10px", left: "10px", zIndex: 10, display: "flex", gap: "5px" }}>
-        {["MT1", "CS2", "PS3", "SC4", "PK6", "OL7", "SW8", "BK9", "CT1", "AG2", "AD5", "FD6", "CE7", "HP8", "PM9"].map((cat) => (
+        {["거주지", "산업단지", "여가단지"].map((cat) => (
           <button
             key={cat}
             onClick={() => handleCategoryClick(cat)}

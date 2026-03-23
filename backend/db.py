@@ -104,3 +104,12 @@ def add_key(sql):
   except mariadb.Error as e:
     print(f"MariaDB Error : {e}")
   return result
+
+
+# def execute(sql):
+#     conn = get_connection()  # 기존 연결 함수 사용
+#     cursor = conn.cursor()
+#     cursor.execute(sql)
+#     conn.commit()
+#     cursor.close()
+#     conn.close()
