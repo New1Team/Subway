@@ -64,7 +64,7 @@ def read(fileCon: FileList):
     file_path = os.path.join(data_path, file_name)
     if not os.path.exists(file_path):
       continue
-    print(f"✅ 처리 중인 파일: {file_path}")
+    print(f"처리 중인 파일: {file_path}")
 
   df = pd.read_csv(file_path, encoding="utf8", header=0, thousands=',', quotechar='"', skipinitialspace=True)
   df.columns = df.columns.str.strip()
@@ -90,12 +90,11 @@ def read(fileCon: FileList):
         # 처음 테이블 생성 때는 overwrite, 추가할 땐 아래 append문
         properties=db_properties
     )
-    print(f"✅ {file_name} 적재 완료!")
+    print(f"{file_name} 적재 완료")
   except Exception as e:
-    print(f"😥 적재실패: {e}")
+    print(f" 적재실패: {e}")
 
   check_df = spark.read.jdbc(settings.db_url, table="coordinate", properties=db_properties)
   print("개수 ", check_df.count())
   check_df.show()
-  return {'message': '적재 성공✨'}
-
+  return {'message': '적재 성공'}
