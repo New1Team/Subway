@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.2.19",
+    "@iconify-json/mdi": "^1.2.3"
+  }
+}
