@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { api } from '@utils/network.js'
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
 const Maps = ({year}) => {
   const [map, setMap] = useState(null); // 지도 객체 저장

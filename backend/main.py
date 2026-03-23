@@ -25,5 +25,3 @@ app.include_router(spark.router)
 @app.get("/")
 def read_root():
   return {"status": True}
-
-
