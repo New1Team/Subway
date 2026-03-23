@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { api } from '../utils/network';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import '../assets/Dashboard.css';
@@ -26,8 +26,8 @@ const Card = () => {
       setLoading(true);
       try {
         const [mapRes, kpiRes] = await Promise.all([
-          axios.get(`http://localhost:8000/data?year=${selectedYear}`),
-          axios.get(`http://localhost:8000/data/kpi?year=${selectedYear}`)
+          api.get(`/data?year=${selectedYear}`),
+          api.get(`/data/kpi?year=${selectedYear}`)
         ]);
 
         setKpiData(kpiRes.data);
@@ -44,7 +44,7 @@ const Card = () => {
   useEffect(() => {
     const fetchWeekendLines = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/data/weekend-lines?year=${selectedYear}`);
+        const res = await api.get(`/data/3.2_weekend-lines?year=${selectedYear}`);
         setWeekendLines(res.data.items || []);
       } catch (error) {
         console.error("주말 노선 데이터 로드 실패:", error);
@@ -60,8 +60,8 @@ const Card = () => {
       setHoveredLine(line);
       setHoverLoading(true);
 
-      const res = await axios.get(
-        `http://localhost:8000/data/weekend-line-stations?year=${selectedYear}&line=${encodeURIComponent(line)}`
+      const res = await api.get(
+        `/data/3.2_weekend-line-stations?year=${selectedYear}&line=${encodeURIComponent(line)}`
       );
 
       setHoverStations(res.data.items || []);
@@ -214,36 +214,36 @@ const Card = () => {
 
           <div className="weekend-line-rank">
             {weekendLines.map((item) => {
-              const max = weekendLines[0]?.weekend_peak || 1;
-              const widthPct = (item.weekend_peak / max) * 100;
+              const max = weekendLines[0]?.value || 1;
+              const widthPct = (item.value / max) * 100;
 
               return (
                 <div
-                  key={`${item.src_year}-${item.호선}`}
+                  key={`${item.year}-${item.line}`}
                   className="line-rank-item"
-                  onMouseEnter={() => handleLineHover(item.호선)}
+                  onMouseEnter={() => handleLineHover(item.line)}
                   onMouseLeave={handleLineLeave}
                 >
                   <div className="line-rank-header">
                     <span className="line-rank-title">
-                      {item.rn}위 {item.호선}호선
+                      {item.rank}위 {item.line}
                     </span>
                     <span className="line-rank-value">
-                      최고점 {fmt(item.weekend_peak)}
+                      최고점 {fmt(item.value)}
                     </span>
                   </div>
 
                   <div className="line-rank-bar-wrap">
                     <div
-                      className={`line-rank-bar rank-${item.rn}`}
+                      className={`line-rank-bar rank-${item.rank}`}
                       style={{ width: `${widthPct}%` }}
                     />
                   </div>
 
-                  {hoveredLine === item.호선 && (
+                  {hoveredLine === item.line && (
                     <div className="line-hover-box">
                       <div className="line-hover-title">
-                        {selectedYear}년 · {item.호선}호선 주말 유동 핵심역 TOP5
+                        {selectedYear}년 · {item.line} 주말 유동 핵심역 TOP5
                       </div>
 
                       {hoverLoading ? (
@@ -251,11 +251,11 @@ const Card = () => {
                       ) : hoverStations.length > 0 ? (
                         <ol className="line-hover-list">
                           {hoverStations.map((station, idx) => (
-                            <li key={`${station.역명}-${idx}`}>
+                            <li key={`${station.station}-${idx}`}>
                               <span>
-                                {station.rn}위 {station.역명}
+                                {station.rank}위 {station.station}
                               </span>
-                              <span>{fmt(station.weekend_peak)}</span>
+                              <span>{fmt(station.value)}</span>
                             </li>
                           ))}
                         </ol>

@@ -1,5 +1,6 @@
 from db import findAll
 from fastapi import APIRouter
+from sql import queries
 
 router = APIRouter(
     prefix="/data",
@@ -100,69 +101,22 @@ def get_kpi(year: int):
 #         return {"error": str(e)}
 
 # 3.2 (주말) 여가/쇼핑 타겟 광고_주말 유동인구 호선 순위
-@router.get('/weekend-lines')
+@router.get('/3.2_weekend-lines')
 def get_weekend_lines(year: int):
-    sql = f"""
-        WITH line_base AS (
-            SELECT s.src_year, s.`호선`,
-                SUM(IFNULL(s.`13~14`,0) + IFNULL(s.`14~15`,0) + IFNULL(s.`15~16`,0) + 
-                IFNULL(s.`16~17`,0) + IFNULL(s.`17~18`,0)) AS weekend_peak
-            FROM subway_total s
-            JOIN holiday_check h
-                ON s.`날짜` = h.`날짜`
-            WHERE h.`휴무일구분` IN ('주말', '공휴일')
-              AND s.src_year = {year}
-            GROUP BY s.src_year, s.`호선`
-        ),
-        ranked AS (
-            SELECT src_year, `호선`, weekend_peak,
-                RANK() OVER (
-                    PARTITION BY src_year
-                    ORDER BY weekend_peak DESC
-                ) AS rn
-            FROM line_base
-        )
-        SELECT
-            src_year, `호선`, weekend_peak, rn
-        FROM ranked
-        WHERE rn <= 3
-        ORDER BY rn;
-    """
-    data = findAll(sql)
-    return {"year": year, "items": data}
+    try:
+        sql = queries.get_weekend_lines_sql(year)
+        result = findAll(sql)
+        print(f"DEBUG [weekend-lines]: {result}") 
+        return {"year": year, "items": result}
+    except Exception as e:
+        return {"error": str(e), "items": []}
 
-# 3.2 (주말) 여가/쇼핑 타겟 광고_주말 유동인구 호선 순위
-@router.get('/weekend-line-stations')
+@router.get('/3.2_weekend-line-stations')
 def get_weekend_line_stations(year: int, line: str):
-    sql = f"""
-        WITH station_base AS (
-            SELECT s.src_year,s.`호선`, s.`역명`,
-                SUM(
-                    IFNULL(s.`13~14`,0) +
-                    IFNULL(s.`14~15`,0) +
-                    IFNULL(s.`15~16`,0) +
-                    IFNULL(s.`16~17`,0) +
-                    IFNULL(s.`17~18`,0)
-                ) AS weekend_peak
-            FROM subway_total s
-            JOIN holiday_check h
-                ON s.`날짜` = h.`날짜`
-            WHERE h.`휴무일구분` IN ('주말', '공휴일')
-              AND s.src_year = {year}
-              AND s.`호선` = '{line}'
-            GROUP BY s.src_year, s.`호선`, s.`역명`
-        ),
-        ranked AS (
-            SELECT src_year, `호선`, `역명`, weekend_peak,
-                RANK() OVER (
-                    ORDER BY weekend_peak DESC
-                ) AS rn
-            FROM station_base
-        )
-        SELECT src_year, `호선`, `역명`, weekend_peak, rn
-        FROM ranked
-        WHERE rn <= 5
-        ORDER BY rn;
-    """
-    data = findAll(sql)
-    return {"year": year, "line": line, "items": data}
+    try:
+        sql = queries.get_weekend_stations_sql(year, line)
+        result = findAll(sql)
+        print(f"DEBUG [weekend-stations]: {result}") 
+        return {"year": year, "line": line, "items": result}
+    except Exception as e:
+        return {"error": str(e), "items": []}

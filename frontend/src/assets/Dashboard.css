@@ -309,7 +309,7 @@
 .line-rank-bar.rank-2 { background: linear-gradient(90deg, #60a5fa, #93c5fd); }
 .line-rank-bar.rank-3 { background: linear-gradient(90deg, #93c5fd, #bfdbfe); }
 
-/* 노선 호버 정보 (Tooltip/Hover Box) */
+/* 호선 호버 정보 (Tooltip/Hover Box) */
 .line-hover-box {
   position: absolute;
   bottom: calc(100% + 10px);
