@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 
 const Card = () => {
