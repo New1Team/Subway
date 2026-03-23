@@ -2,6 +2,19 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/Dashboard.css';
 import Maps from './Maps';
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
+
+
+
 
 const Card = () => {
   // --- 상태 관리 ---
@@ -14,17 +27,23 @@ const Card = () => {
   });
 
   // --- 데이터 호출: 연도가 바뀔 때마다 실행 ---
-  useEffect(() => {
+    useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [mapRes, kpiRes] = await Promise.all([
+        const [mapRes, kpiRes,scatterRes] = await Promise.all([
           axios.get(`http://localhost:8000/data?year=${selectedYear}`),
-          axios.get(`http://localhost:8000/data/kpi?year=${selectedYear}`)
+          axios.get(`http://localhost:8000/data/kpi?year=${selectedYear}`),
+          axios.get(`http://localhost:8000/data/scatter?year=${selectedYear}`),
         ]);
-         
-         setKpiData(kpiRes.data);
+          
+      setKpiData(kpiRes.data);
       
+     const rows = scatterRes.data.data;
+    //전체 평균값을 State에 저장
+        setData(rows.map((r) => ({ x: r.x_value, y: r.y_value, name: r.역명 })));
+        if (rows.length > 0) setAvg({ x: rows[0].avg_x, y: rows[0].avg_y });
+
       } catch (error) {
         console.error("데이터 로드 실패:", error);
       } finally {
@@ -32,10 +51,29 @@ const Card = () => {
       }
     };
 
-    fetchData();
-  }, [selectedYear]);
- 
+     fetchData();
+  },[selectedYear]);
+
   const fmt = (n) => Number(n ?? 0).toLocaleString();
+
+     //툴팁 : 출근 하차 , 퇴근 승차 전체합을 보여주주는 툴팁// 
+  const CustomTooltip = ({ active, payload }) => {
+      if (active && payload?.length) {
+        const d = payload[0].payload;
+        return (
+        <div style={{ background: "#fff", border: "1px solid #ccc", padding: "8px", borderRadius: "6px" }}>
+          <p style={{ margin: 0, fontWeight: "bold" }}>{d.name}</p>
+          <p style={{ margin: 0 }}>출근 하차 전체합: {d.x.toLocaleString()}</p>
+          <p style={{ margin: 0 }}>퇴근 승차 전체합: {d.y.toLocaleString()}</p>
+        </div>
+      );
+    }
+    return null;
+  };  
+      
+      
+
+
 
   return (
     <div className="dashboard-wrapper">
