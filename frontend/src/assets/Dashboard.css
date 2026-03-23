@@ -120,9 +120,11 @@
   box-sizing: border-box;
 }
 
-.map-section { 
-  position: relative; 
-  padding: 10px !important; 
+.map-section {
+  position: relative;
+  padding: 10px !important;
+  height: 450px;
+  width: 100%; 
 }
 
 /* 2.2 지표 설명 (.analytics-info-bar) */
