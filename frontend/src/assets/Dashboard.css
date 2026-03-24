@@ -42,6 +42,7 @@
   align-items: stretch;
 }
 
+
 .kpi-card {
   width: 100%;
   min-width: 0;
@@ -53,19 +54,23 @@
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
+
+/* kpi 타이틀 글자색깔 */
 .kpi-title {
   display: block;
   margin-bottom: 18px;
   font-size: 16px;
   font-weight: 800;
-  color: #111827;
+  color: #000000;
 }
 
+/* 카드 감싸는 부분 */
 .kpi-card-body {
   width: 100%;
   min-width: 0;
 }
 
+/*카드 한개를 두개의 칸으로 나누는 css */
 .kpi-2col {
   display: grid;
   grid-template-columns: 1fr 1px 1fr;
@@ -73,6 +78,7 @@
   width: 100%;
 }
 
+/* 4개의 칸으로 나누는 css */
 .kpi-4col {
   display: grid;
   grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr;
@@ -80,6 +86,7 @@
   width: 100%;
 }
 
+/* 데이터 들어가는 칸 */
 .kpi-section {
   min-width: 0;
   display: flex;
@@ -90,12 +97,14 @@
   text-align: center;
 }
 
+/* 가운데 세로줄 */
 .kpi-divider {
   width: 1px;
   background: #d9dee7;
   height: 100%;
 }
 
+/* 폰트 사이즈 */
 .kpi-section-label {
   display: inline-flex;
   align-items: center;
@@ -107,14 +116,17 @@
   white-space: nowrap;
 }
 
+/* 승차 circle 색  */
 .kpi-section-label.boarding {
   color: #2e7d32;
 }
-
+/* 하차 circle 색  */
 .kpi-section-label.alighting {
   color: #c62828;
 }
 
+
+/* 텍스트(가장 큰 메인 텍스트) */
 .kpi-value {
   width: 100%;
   min-height: 44px;
@@ -131,6 +143,7 @@
   text-overflow: ellipsis;
 }
 
+/* 작은 텍스트 */
 .kpi-value-sm {
   width: 100%;
   min-height: 52px;
@@ -147,6 +160,7 @@
   overflow-wrap: break-word;
 }
 
+/* 숫자텍스트 */
 .kpi-sub {
   min-height: 22px;
   margin-top: 6px;
@@ -555,6 +569,7 @@
   margin-top: 24px;
 }
 
+/* 타이틀 텍스트 */
 .weekday-scatter-title {
   font-size: 0.95rem;
   font-weight: 800;
@@ -562,6 +577,7 @@
   margin-bottom: 14px;
 }
 
+/* 산점도 그래프 박스 */
 .scatter-chart-box {
   width: 100%;
   background: #fbfcfe;
@@ -571,19 +587,20 @@
   box-sizing: border-box;
 }
 
-.scatter-info-bar {
-  margin-top: 14px;
-  width: 100%;
-  border: 1px solid #e5eaf0;
-  border-radius: 16px;
-  background: #fcfdff;
-  padding: 14px 18px;
-  box-sizing: border-box;
-}
+/* 가장 바깥쪽 박스 */
+  .scatter-info-bar {
+    margin-top: 14px;
+    width: 100%;
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    background: #fcfdff;
+    padding: 14px 18px;
+    box-sizing: border-box;
+  }
 
-.scatter-info-bar .info-group {
-  width: 100%;
-}
+  .scatter-info-bar .info-group {
+    width: 100%;
+  }
 
 /* 주말 랭크 */
 .weekend-line-rank {
@@ -643,6 +660,7 @@
 .line-rank-bar.rank-3 {
   background: linear-gradient(90deg, #93c5fd, #bfdbfe);
 }
+
 
 .line-hover-box {
   background: #ffffff;
@@ -746,44 +764,7 @@
     padding: 8px 14px;
   }
 
-  .kpi-card {
-    padding: 18px 16px !important;
-  }
 
-  .kpi-title {
-    font-size: 15px;
-  }
-
-  .kpi-value {
-    font-size: 24px;
-  }
-
-  .kpi-value-sm {
-    font-size: 16px;
-    min-height: 46px;
-  }
-
-  .kpi-sub {
-    font-size: 13px;
-  }
-
-  .kpi-section-label {
-    font-size: 11px;
-  }
-
-  .kpi-4col {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .kpi-2col {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .kpi-divider {
-    display: none;
-  }
 
   .map-info-wrap {
     margin-top: -2px;
